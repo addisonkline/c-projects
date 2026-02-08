@@ -1,0 +1,4 @@
+/home/wyoming/Programming/c-projects/build/CMakeFiles/edit_cache.dir
+/home/wyoming/Programming/c-projects/build/CMakeFiles/rebuild_cache.dir
+/home/wyoming/Programming/c-projects/build/projects/minigrep/CMakeFiles/edit_cache.dir
+/home/wyoming/Programming/c-projects/build/projects/minigrep/CMakeFiles/rebuild_cache.dir
