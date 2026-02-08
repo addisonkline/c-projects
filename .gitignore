@@ -55,6 +55,7 @@ dkms.conf
 *.dwo
 
 # Build executables
-./minigrep
-./search.gitignore:
+bin/
+
+# Build artifacts
 search.txt
