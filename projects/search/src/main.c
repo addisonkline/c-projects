@@ -11,7 +11,7 @@ void print_usage(void) {
     printf("usage: search [OPTION]... LITERAL [FILE]...\n");
     printf("\nSearch for a string literal in the given file(s)\n");
     printf("\nOptions:\n");
-    printf("    -n, --line-number: include line numbers for each literal found\n");
+    printf("    -n, --line-numbers: include line numbers for each literal found\n");
     printf("    -v, --verbose: print more detailed search info\n");
     printf("    -h, --help: show this message and exit\n");
     printf("    -V, --version: show the program version and exit\n");
