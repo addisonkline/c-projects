@@ -56,3 +56,5 @@ dkms.conf
 
 # Build executables
 ./minigrep
+./search.gitignore:
+search.txt
