@@ -40,16 +40,16 @@ void write_find_to_file(
     // 1.5. write a colon
     fwrite(":", 1, 1, stream);
     // 2. write the line number
-    int line_num_strlen = (int)((ceil(log10(line_num))+1)*sizeof(char));
+    int line_num_strlen = (int)((floor(log10(line_num))+1)*sizeof(char));
     char line_num_str[line_num_strlen];
-    sprintf(line_num_str, "%d", line_num);
+    snprintf(line_num_str, line_num_strlen + 1, "%d", line_num);
     fwrite(line_num_str, line_num_strlen, 1, stream);
     // 2.5. write a colon
     fwrite(":", 1, 1, stream);
     // 3. write the column number
-    int col_num_strlen = (int)((ceil(log10(col_num))+1)*sizeof(char));
+    int col_num_strlen = (int)((floor(log10(col_num))+1)*sizeof(char));
     char col_num_str[col_num_strlen];
-    sprintf(col_num_str, "%d", col_num);
+    snprintf(col_num_str, col_num_strlen + 1, "%d", col_num);
     fwrite(col_num_str, col_num_strlen, 1, stream);
     // 3.5. write the final newline
     fwrite("\n", 1, 1, stream);
