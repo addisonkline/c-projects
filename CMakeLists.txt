@@ -7,6 +7,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_subdirectory(projects/search)
 add_subdirectory(projects/explore)
+add_subdirectory(projects/write)
 
 if (CMAKE_C_COMPILER_ID MATCHES "Clang|GNU")
   add_compile_options(-Wall -Wextra -Wpedantic -Wshadow -Wconversion -Werror)
