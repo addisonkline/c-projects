@@ -1,3 +1,5 @@
+#define _DEFAULT_SOURCE
+
 #include "explore.h"
 
 void print_usage(void) {
@@ -5,6 +7,7 @@ void print_usage(void) {
     printf("\nSearch for a file by name in the given directory (or directories)\n");
     printf("\nOptions:\n");
     printf("    -v, --verbose: print more detailed search info\n");
+    printf("    -r, --recursive: recursively search the given directory (or directories)\n");
     printf("    -o OUTFILE, --outfile OUTFILE: write the search results to the specified file\n");
     printf("    -l CODE, --lookup CODE: determine the meaning of a non-zero status code and exit\n");
     printf("    -h, --help: show this message and exit\n");
@@ -99,8 +102,11 @@ void check_directory(
     const char* dir_path,
     const char* filename,
     const char* outfile,
-    int verbose
+    int verbose,
+    int recursive
 ) { 
+    if (verbose) printf("checking directory: %s\n", dir_path);
+
     DIR* dir;
     struct dirent* entry;
 
@@ -112,12 +118,36 @@ void check_directory(
 
     while ((entry = readdir(dir)) != NULL) {
         const char* entry_name = entry->d_name;
-        if (verbose) printf("checking %s/%s\n", dir_path, entry_name);
-        if (strcmp(filename, entry_name) == 0) {
-            if (verbose) printf("[FIND]\n");
-            printf("found %s in %s\n", filename, dir_path);
-            if (verbose) printf("[/FIND]\n");
-            if (outfile != NULL) write_find_to_file(outfile, dir_path, filename, verbose);
+
+        if (recursive) {
+            if (entry->d_type == DT_DIR) {
+                char path[PATH_MAX_LEN];
+
+                // skip current and parent dirs
+                if (strcmp(entry_name, ".") == 0 || strcmp(entry_name, "..") == 0) continue;
+
+                // construct new path for recursive checking
+                snprintf(path, sizeof(path), "%s/%s", dir_path, entry_name);
+
+                // recursive call to check_directory
+                check_directory(path, filename, outfile, verbose, recursive);
+            } else {
+                if (verbose) printf("checking %s/%s\n", dir_path, entry_name);
+                if (strcmp(filename, entry_name) == 0) {
+                    if (verbose) printf("[FIND]\n");
+                    printf("found %s in %s\n", filename, dir_path);
+                    if (verbose) printf("[/FIND]\n");
+                    if (outfile != NULL) write_find_to_file(outfile, dir_path, filename, verbose);
+                }
+            }
+        } else {
+            if (verbose) printf("checking %s/%s\n", dir_path, entry_name);
+            if (strcmp(filename, entry_name) == 0) {
+                if (verbose) printf("[FIND]\n");
+                printf("found %s in %s\n", filename, dir_path);
+                if (verbose) printf("[/FIND]\n");
+                if (outfile != NULL) write_find_to_file(outfile, dir_path, filename, verbose);
+            }
         }
     }
 
@@ -125,28 +155,35 @@ void check_directory(
         printf("unable to close directory %s\n", dir_path);
         exit(DIRECTORY_CLOSE_FAILURE);
     }
+
+    if (verbose) printf("===\n");
 }
 
 int main(int argc, char* argv[]) {
     int verbose = 0;
+    int recursive = 0;
     char* filename;
     char* outfile;
     char* lookup_val;
 
     static struct option long_options[] = {
-        { "verbose", no_argument,       0, 'v' },
-        { "help",    no_argument,       0, 'h' },
-        { "version", no_argument,       0, 'V' },
-        { "lookup",  required_argument, 0, 'l' },
-        { "outfile", required_argument, 0, 'o' },
-        { 0,         0,                 0, 0   }
+        { "verbose",   no_argument,       0, 'v' },
+        { "recursive", no_argument,       0, 'r' },
+        { "help",      no_argument,       0, 'h' },
+        { "version",   no_argument,       0, 'V' },
+        { "lookup",    required_argument, 0, 'l' },
+        { "outfile",   required_argument, 0, 'o' },
+        { 0,           0,                 0, 0   }
     };
 
     int opt;
-    while ((opt = getopt_long(argc, argv, "vhVl:o:", long_options, NULL)) != -1) {
+    while ((opt = getopt_long(argc, argv, "vrhVl:o:", long_options, NULL)) != -1) {
         switch (opt) {
             case 'v':
                 verbose = 1;
+                break;
+            case 'r':
+                recursive = 1;
                 break;
             case 'o':
                 outfile = optarg;
@@ -177,7 +214,8 @@ int main(int argc, char* argv[]) {
 
     if (verbose) {
         printf("verbose = %i\n", verbose);
-        printf("outfile = '%s'\n", outfile);
+        printf("recursive = %i\n", recursive);
+        printf("outfile = %s\n", outfile);
         printf("filename = %s\n", filename);
         printf("=====\n");
     }
@@ -188,9 +226,7 @@ int main(int argc, char* argv[]) {
         exit(NO_DIRECTORY_GIVEN);
     }
     for (int i = optind; i < argc; i++) {
-        if (verbose) printf("checking directory: %s\n", argv[i]);
-        check_directory(argv[i], filename, outfile, verbose);
-        if (verbose) printf("===\n");
+        check_directory(argv[i], filename, outfile, verbose, recursive);
     }
 
     return 0;
