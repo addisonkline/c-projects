@@ -1,4 +1,6 @@
-/home/wyoming/Programming/c-projects/build/CMakeFiles/edit_cache.dir
-/home/wyoming/Programming/c-projects/build/CMakeFiles/rebuild_cache.dir
-/home/wyoming/Programming/c-projects/build/projects/search/CMakeFiles/edit_cache.dir
-/home/wyoming/Programming/c-projects/build/projects/search/CMakeFiles/rebuild_cache.dir
+/home/charon-labs/c-projects/build/CMakeFiles/edit_cache.dir
+/home/charon-labs/c-projects/build/CMakeFiles/rebuild_cache.dir
+/home/charon-labs/c-projects/build/projects/search/CMakeFiles/edit_cache.dir
+/home/charon-labs/c-projects/build/projects/search/CMakeFiles/rebuild_cache.dir
+/home/charon-labs/c-projects/build/projects/explore/CMakeFiles/edit_cache.dir
+/home/charon-labs/c-projects/build/projects/explore/CMakeFiles/rebuild_cache.dir

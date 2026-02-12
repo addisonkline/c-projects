@@ -1,4 +1,4 @@
-# Install script for directory: /home/wyoming/Programming/c-projects
+# Install script for directory: /home/charon-labs/c-projects
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,7 +44,12 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/wyoming/Programming/c-projects/build/projects/search/cmake_install.cmake")
+  include("/home/charon-labs/c-projects/build/projects/search/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("/home/charon-labs/c-projects/build/projects/explore/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -55,5 +60,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/wyoming/Programming/c-projects/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/charon-labs/c-projects/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

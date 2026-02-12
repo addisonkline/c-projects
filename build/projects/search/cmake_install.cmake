@@ -1,4 +1,4 @@
-# Install script for directory: /home/wyoming/Programming/c-projects/projects/search
+# Install script for directory: /home/charon-labs/c-projects/projects/search
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
