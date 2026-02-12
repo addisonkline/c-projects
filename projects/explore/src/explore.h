@@ -13,11 +13,14 @@
 #define NO_FILENAME_GIVEN 5
 #define NO_DIRECTORY_GIVEN 6
 #define INVALID_LOOKUP_CODE 7
+#define OUTFILE_OPEN_FAILURE 8
 
 void print_usage(void);
 
 void lookup_exit_code(const char*);
 
-void check_directory(const char*, const char*, int);
+void write_find_to_file(const char*, const char*, const char*, int);
+
+void check_directory(const char*, const char*, const char*, int);
 
 int main(int, char**);

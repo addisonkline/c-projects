@@ -5,6 +5,7 @@ void print_usage(void) {
     printf("\nSearch for a file by name in the given directory (or directories)\n");
     printf("\nOptions:\n");
     printf("    -v, --verbose: print more detailed search info\n");
+    printf("    -o OUTFILE, --outfile OUTFILE: write the search results to the specified file\n");
     printf("    -l CODE, --lookup CODE: determine the meaning of a non-zero status code and exit\n");
     printf("    -h, --help: show this message and exit\n");
     printf("    -V, --version: show the program version and exit\n");
@@ -56,15 +57,48 @@ void lookup_exit_code(
             printf("7: INVALID_LOOKUP_CODE\n");
             printf("The program was given an unrecognized lookup code.\n");
             break;
+        case 8:
+            printf("8: OUTFILE_OPEN_FAILURE\n");
+            printf("The program was unable to open the given output file by name.\n");
+            printf("Ensure the given output file name is available to use.\n");
+            break;
         default:
             printf("invalid exit code: %i\n", code);
             exit(INVALID_LOOKUP_CODE);
     }
 }
 
+void write_find_to_file(
+    const char* outfile,
+    const char* dir_path,
+    const char* filename,
+    int verbose
+) {
+    FILE* stream;
+    stream = fopen(outfile, "a");
+    if (stream == NULL) {
+        printf("failed to open outfile\n");
+        exit(OUTFILE_OPEN_FAILURE);
+    }
+
+    // 1. write the dir_path
+    int dir_path_len = strlen(dir_path);
+    fwrite(dir_path, dir_path_len, 1, stream);
+    // 2. write the "/"
+    fwrite("/", 1, 1, stream);
+    // 3. write the filename
+    int filename_len = strlen(filename);
+    fwrite(filename, filename_len, 1, stream);
+    // 4. write the final newline
+    fwrite("\n", 1, 1, stream);
+
+    fclose(stream);
+}
+
 void check_directory(
     const char* dir_path,
     const char* filename,
+    const char* outfile,
     int verbose
 ) { 
     DIR* dir;
@@ -83,6 +117,7 @@ void check_directory(
             if (verbose) printf("[FIND]\n");
             printf("found %s in %s\n", filename, dir_path);
             if (verbose) printf("[/FIND]\n");
+            if (outfile != NULL) write_find_to_file(outfile, dir_path, filename, verbose);
         }
     }
 
@@ -95,6 +130,7 @@ void check_directory(
 int main(int argc, char* argv[]) {
     int verbose = 0;
     char* filename;
+    char* outfile;
     char* lookup_val;
 
     static struct option long_options[] = {
@@ -102,14 +138,18 @@ int main(int argc, char* argv[]) {
         { "help",    no_argument,       0, 'h' },
         { "version", no_argument,       0, 'V' },
         { "lookup",  required_argument, 0, 'l' },
+        { "outfile", required_argument, 0, 'o' },
         { 0,         0,                 0, 0   }
     };
 
     int opt;
-    while ((opt = getopt_long(argc, argv, "vhVl:", long_options, NULL)) != -1) {
+    while ((opt = getopt_long(argc, argv, "vhVl:o:", long_options, NULL)) != -1) {
         switch (opt) {
             case 'v':
                 verbose = 1;
+                break;
+            case 'o':
+                outfile = optarg;
                 break;
             case 'l':
                 lookup_val = optarg;
@@ -137,6 +177,7 @@ int main(int argc, char* argv[]) {
 
     if (verbose) {
         printf("verbose = %i\n", verbose);
+        printf("outfile = '%s'\n", outfile);
         printf("filename = %s\n", filename);
         printf("=====\n");
     }
@@ -148,7 +189,7 @@ int main(int argc, char* argv[]) {
     }
     for (int i = optind; i < argc; i++) {
         if (verbose) printf("checking directory: %s\n", argv[i]);
-        check_directory(argv[i], filename, verbose);
+        check_directory(argv[i], filename, outfile, verbose);
         if (verbose) printf("===\n");
     }
 

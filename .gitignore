@@ -59,6 +59,7 @@ bin/
 
 # Build artifacts
 search.txt
+explore.txt
 
 build/
 **/build/
