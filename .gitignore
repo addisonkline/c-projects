@@ -56,8 +56,6 @@ dkms.conf
 
 # Build executables
 bin/
-search
-explore
 
 # Build artifacts
 search.txt
