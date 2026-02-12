@@ -6,14 +6,14 @@ void print_usage(void) {
     printf("usage: explore [OPTION]... FILENAME [DIRECTORY]...\n");
     printf("\nSearch for a file by name in the given directory (or directories)\n");
     printf("\nOptions:\n");
-    printf("    -v, --verbose: print more detailed search info\n");
-    printf("    -r, --recursive: recursively search the given directory (or directories)\n");
+    printf("    -v, --verbose                : print more detailed search info\n");
+    printf("    -r, --recursive              : recursively search the given directory (or directories)\n");
     printf("    -o OUTFILE, --outfile OUTFILE: write the search results to the specified file\n");
-    printf("    -l CODE, --lookup CODE: determine the meaning of a non-zero status code and exit\n");
-    printf("    -h, --help: show this message and exit\n");
-    printf("    -V, --version: show the program version and exit\n");
+    printf("    -l CODE, --lookup CODE       : determine the meaning of a non-zero status code and exit\n");
+    printf("    -h, --help                   : show this message and exit\n");
+    printf("    -V, --version                : show the program version and exit\n");
     printf("\nPositionals:\n");
-    printf("    FILENAME: the filename to search for\n");
+    printf("    FILENAME    : the filename to search for\n");
     printf("    DIRECTORY...: the directory (or directories) to search in\n");
     printf("\nCopyright (c) 2026 Addison Kline (GitHub: @addisonkline)\n");
 }
@@ -94,6 +94,8 @@ void write_find_to_file(
     fwrite(filename, filename_len, 1, stream);
     // 4. write the final newline
     fwrite("\n", 1, 1, stream);
+
+    if (verbose) printf("wrote new entry to %s: %s/%s\n", outfile, dir_path, filename);
 
     fclose(stream);
 }
